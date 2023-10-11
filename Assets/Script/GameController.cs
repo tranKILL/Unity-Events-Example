@@ -34,9 +34,9 @@ namespace NJ_Event {
         }
         private void OnLeftCubeClick(Vector3 leftCubeSize)
         {
-            Debug.Log("Cube size: " + leftCubeSize);
+//Debug.Log("Cube size: " + leftCubeSize);
             m_scoreManager.IncreaseScore((int) leftCubeSize.x);
-            m_scoreManager.UpdateScoreText();
+            //m_scoreManager.UpdateScoreText();
         }
 
         private void Update()
@@ -105,11 +105,12 @@ Debug.Log("4 HandleLeftMouseInput");
 
         void OnLeftClicCubeDown(Dictionary<string, object> message)
         {
-Debug.Log("3 " + message + " OnLeftClicCubeDown - " + message["clic"]);
+//Debug.Log("3 " + message + " OnLeftClicCubeDown - " + message["clic"]);
         }
         void OnLeftClicCubeUp(Dictionary<string, object> message)
         {
-Debug.Log(message + " OnLeftClicCubeUp - " + message["clic"]);
+//Debug.Log(message + " OnLeftClicCubeUp - " + message["clic"]);
+            m_scoreManager.DecreaseScore(1);
         }
 
         void OnDisable() {

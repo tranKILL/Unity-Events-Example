@@ -24,6 +24,13 @@ namespace NJ_Event
             //EventsHandler.TriggerEvent("scoreUpdate", new Dictionary<string, object> { { "scoreText", score } });
         }
 
+        public void DecreaseScore(int points)
+        {
+            score -= points;
+            UpdateScoreText();
+            //EventsHandler.TriggerEvent("scoreUpdate", new Dictionary<string, object> { { "scoreText", score } });
+        }
+
         public void UpdateScoreText()
         {
             if (scoreText != null)

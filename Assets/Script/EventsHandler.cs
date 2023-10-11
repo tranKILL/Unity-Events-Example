@@ -72,7 +72,7 @@ namespace NJ_Event
 
         public static void TriggerEvent(string eventName, Dictionary<string, object> message)
         {
-Debug.Log("2 Event: " + eventName);
+//Debug.Log("2 Event: " + eventName);
             Action<Dictionary<string, object>> thisEvent = null;
             if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
             {

@@ -26,7 +26,7 @@ namespace NJ_Event
         }
         void OnMouseUp()
         {
-Debug.Log("1 Cube OnMouseLeftUp");
+//Debug.Log("1 Cube OnMouseLeftUp");
             EventsHandler.TriggerEvent("leftClicCubeUp", new Dictionary<string, object> { { "clic", 2 } });
         }
     }
