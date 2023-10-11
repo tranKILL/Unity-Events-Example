@@ -1,4 +1,7 @@
 # Unity C# Events
  Example of events in Unity
 
- hello
+EventManager.StartListening("scoreUpdate", OnScoreUpdate);
+EventManager.StartListening("addCoins", OnAddCoins);
+EventManager.StartListening("clic", OnClic);
+
