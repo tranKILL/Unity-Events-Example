@@ -24,17 +24,19 @@ namespace NJ_Event {
         private void Start()
         {
             screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-            CubeEventProducer.OnLeftCubeClick += ReactToClick;
+            CubeEventProducer.OnLeftCubeClick += OnLeftCubeClick;
         }
         private void OnDestroy()
         {
             // Assurez-vous de vous désabonner de l'événement pour éviter des fuites de mémoire
-            CubeEventProducer.OnLeftCubeClick -= ReactToClick;
+            CubeEventProducer.OnLeftCubeClick -= OnLeftCubeClick;
             OnDisable();
         }
-        private void ReactToClick(Vector3 leftCubeSize)
+        private void OnLeftCubeClick(Vector3 leftCubeSize)
         {
             Debug.Log("Cube size: " + leftCubeSize);
+            m_scoreManager.IncreaseScore((int) leftCubeSize.x);
+            m_scoreManager.UpdateScoreText();
         }
 
         private void Update()
