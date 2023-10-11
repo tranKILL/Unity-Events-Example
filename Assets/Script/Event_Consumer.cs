@@ -10,14 +10,14 @@ namespace NJ_Event
 
         void OnEnable()
         {
-            EventManager.StartListening("addCoins", OnAddCoins);
-            EventManager.StartListening("clic", OnClic);
+            EventsHandler.StartListening("addCoins", OnAddCoins);
+            EventsHandler.StartListening("clic", OnClic);
         }
 
         void OnDisable()
         {
-            EventManager.StopListening("addCoins", OnAddCoins);
-            EventManager.StopListening("clic", OnClic);
+            EventsHandler.StopListening("addCoins", OnAddCoins);
+            EventsHandler.StopListening("clic", OnClic);
         }
 
         void OnAddCoins(Dictionary<string, object> message)

@@ -6,18 +6,18 @@ namespace NJ_Event
 
     [DisallowMultipleComponent]
 
-    public class EventManager : MonoBehaviour
+    public class EventsHandler : MonoBehaviour
     {
         private Dictionary<string, Action<Dictionary<string, object>>> eventDictionary;
-        private static EventManager eventManager;
+        private static EventsHandler eventManager;
 
-        public static EventManager instance
+        public static EventsHandler instance
         {
             get
             {
                 if (!eventManager)
                 {
-                    eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
+                    eventManager = FindObjectOfType(typeof(EventsHandler)) as EventsHandler;
 
                     if (!eventManager)
                     {
@@ -72,7 +72,7 @@ namespace NJ_Event
 
         public static void TriggerEvent(string eventName, Dictionary<string, object> message)
         {
-Debug.Log("Event: " + eventName);
+Debug.Log("2 Event: " + eventName);
             Action<Dictionary<string, object>> thisEvent = null;
             if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
             {
