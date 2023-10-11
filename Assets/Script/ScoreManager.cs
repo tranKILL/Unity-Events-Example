@@ -2,10 +2,10 @@ namespace NJ_Event
 {
     using UnityEngine;
     using TMPro;
-    using System.Collections.Generic;
-
+#if UNITY_EDITOR
     [DisallowMultipleComponent]
     [RequireComponent(typeof(TMP_Text))]
+#endif
     public class ScoreManager : MonoBehaviour
     {
         private TMP_Text scoreText;

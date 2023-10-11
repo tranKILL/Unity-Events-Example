@@ -3,9 +3,9 @@ namespace NJ_Event
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-
+#if UNITY_EDITOR
     [DisallowMultipleComponent]
-
+#endif
     public class EventsHandler : MonoBehaviour
     {
         private Dictionary<string, Action<Dictionary<string, object>>> eventDictionary;

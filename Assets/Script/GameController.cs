@@ -3,9 +3,12 @@ namespace NJ_Event {
     using System.Collections.Generic;
     using UnityEngine;
 
+#if UNITY_EDITOR
     [DisallowMultipleComponent]
     //[RequireComponent(typeof(InputManager))]
     [RequireComponent(typeof(ScoreManager))]
+    //[RequireComponent(typeof(LifeManager))]
+#endif
 
     public class GameController : InputManager {
         public static event System.Action<Vector3> OnMouseClick;
@@ -13,30 +16,38 @@ namespace NJ_Event {
 
         //private InputManager m_inputManager;
         private ScoreManager m_scoreManager;
+        private LifeManager m_lifeManager;
 
         private Vector3 screenBounds;
 
         private void Awake()
         {
             //m_inputManager = gameObject.GetComponent<InputManager>();
-            m_scoreManager = GetComponent<ScoreManager>();
+            m_scoreManager = GetComponent<ScoreManager>(); //-> Child
+            m_lifeManager = GetComponentInChildren<LifeManager>();
         }
+ 
         private void Start()
         {
             screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
             CubeEventProducer.OnLeftCubeClick += OnLeftCubeClick;
+            Cube2Producer.OnLeftCube2Click += OnLeftCube2Click;
         }
         private void OnDestroy()
         {
             // Assurez-vous de vous désabonner de l'événement pour éviter des fuites de mémoire
             CubeEventProducer.OnLeftCubeClick -= OnLeftCubeClick;
+            Cube2Producer.OnLeftCube2Click -= OnLeftCube2Click;
             OnDisable();
         }
         private void OnLeftCubeClick(Vector3 leftCubeSize)
         {
-//Debug.Log("Cube size: " + leftCubeSize);
             m_scoreManager.IncreaseScore((int) leftCubeSize.x);
-            //m_scoreManager.UpdateScoreText();
+        }
+        private void OnLeftCube2Click(Vector3 leftCube2Size)
+        {
+Debug.Log("OnLeftCube2Click");
+            m_lifeManager.IncreaseLife(2);
         }
 
         private void Update()
@@ -47,7 +58,7 @@ namespace NJ_Event {
                 FireContinuousLaser();
             }*/
             HandleKeyboardInput();
-            HandleMouseInput();
+            //HandleMouseInput();
         }
 
         private void HandleKeyboardInput()
