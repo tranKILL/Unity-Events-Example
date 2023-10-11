@@ -1,2 +1,2 @@
-# Unity_CSharp_Events
+# Unity C# Events
  Example of events in Unity
