@@ -23,6 +23,11 @@ public class CubeMove : MonoBehaviour
         endPosition = startPosition + Vector3.up * moveDistance; // Calculate the end position for the upward movement
         StartCoroutine(MoveUpAndDown()); // Start the movement coroutine
     }
+    private void OnDestroy()
+    {
+        GameController.FreezeCube -= Freeze;
+        GameController.UnfreezeCube -= Unfreeze;
+    }
     public void SetSpeed(float _speed = 1) //useless ?
     {
         moveSpeed = _speed;
