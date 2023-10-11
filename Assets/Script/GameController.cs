@@ -24,8 +24,19 @@ namespace NJ_Event {
         private void Start()
         {
             screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
+            CubeEventProducer.OnLeftCubeClick += ReactToClick;
         }
+        private void OnDestroy()
+        {
+            // Assurez-vous de vous désabonner de l'événement pour éviter des fuites de mémoire
+            CubeEventProducer.OnLeftCubeClick -= ReactToClick;
+            OnDisable();
+        }
+        private void ReactToClick(Vector3 leftCubeSize)
+        {
+            Debug.Log("Cube size: " + leftCubeSize);
+        }
+
         private void Update()
         {
             /*CheckProjectileOutOfBounds();
@@ -106,10 +117,6 @@ Debug.Log(message + " OnLeftClicCubeUp - " + message["clic"]);
             EventsHandler.StopListening("leftClicCubeUp", OnLeftClicCubeUp);
             EventsHandler.StopListening("leftClic", OnLeftClic);
             EventsHandler.StopListening("rightClic", OnRightClic);
-        }
-        private void OnDestroy()
-        {
-            OnDisable();
         }
 
 

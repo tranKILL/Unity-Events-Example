@@ -4,8 +4,8 @@ namespace NJ_Event
     using TMPro;
     using System.Collections.Generic;
 
-    [RequireComponent(typeof(TMP_Text))]
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(TMP_Text))]
     public class ScoreManager : MonoBehaviour
     {
         private TMP_Text scoreText; // Reference to the TextMeshPro Text object
@@ -15,14 +15,15 @@ namespace NJ_Event
         {
             // Initialize the score text
             scoreText = GetComponent<TMP_Text>();
+            //scoreText.transform.position = new Vector3 (0, 0, 0);
             UpdateScoreText();
         }
-        // Call this method whenever you want to update the score
+
         public void IncreaseScore(int points)
         {
             score += points;
-            UpdateScoreText();
-            EventManager.TriggerEvent("scoreUpdate", new Dictionary<string, object> { { "scoreText", scoreText.text } });
+            //UpdateScoreText();
+            EventsHandler.TriggerEvent("scoreUpdate", new Dictionary<string, object> { { "scoreText", score } });
         }
 
         public void UpdateScoreText()
