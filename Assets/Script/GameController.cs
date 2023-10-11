@@ -46,7 +46,6 @@ namespace NJ_Event {
         }
         private void OnLeftCube2Click(Vector3 leftCube2Size)
         {
-Debug.Log("OnLeftCube2Click");
             m_lifeManager.IncreaseLife(2);
         }
 
@@ -75,7 +74,7 @@ Debug.Log("OnLeftCube2Click");
             Vector3 mousePosition = Input.mousePosition;
             if (Input.GetMouseButtonDown(0))
             {
-Debug.Log("4 HandleLeftMouseInput");
+//Debug.Log("4 HandleLeftMouseInput");
                 OnMouseClick?.Invoke(mousePosition);
             }
             /*else if (Input.GetMouseButtonDown(1))

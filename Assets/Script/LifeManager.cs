@@ -16,7 +16,11 @@ namespace NJ_Event
         private void OnEnable()
         {
             lifeText = GetComponent<TMP_Text>();
-            //UpdateLifeText();
+        }
+
+        public bool IsDead()
+        {
+            return life >= 0;
         }
 
         public void IncreaseLife(int _life)
@@ -33,7 +37,6 @@ namespace NJ_Event
 
         public void UpdateLifeText()
         {
-Debug.Log("UpdateLifeText:" + life);
             if (lifeText != null)
             {
                 lifeText.text = life.ToString();
