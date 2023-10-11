@@ -1,5 +1,4 @@
 namespace NJ_Event {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -13,6 +12,9 @@ namespace NJ_Event {
     public class GameController : InputManager {
         public static event System.Action<Vector3> OnMouseClick;
         public static event System.Action<KeyCode> OnKeyPress;
+
+        public static event System.Action FreezeCube;
+        public static event System.Action UnfreezeCube;
 
         //private InputManager m_inputManager;
         private ScoreManager m_scoreManager;
@@ -32,21 +34,29 @@ namespace NJ_Event {
             screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
             CubeEventProducer.OnLeftCubeClick += OnLeftCubeClick;
             Cube2Producer.OnLeftCube2Click += OnLeftCube2Click;
+            CubeMove.OnSwitchCube += OnSwitchCube;
+        }
+        private void OnSwitchCube(int _nbCubeSwitch)
+        {
+            m_lifeManager.DecreaseLife(_nbCubeSwitch);
         }
         private void OnDestroy()
         {
             // Assurez-vous de vous désabonner de l'événement pour éviter des fuites de mémoire
             CubeEventProducer.OnLeftCubeClick -= OnLeftCubeClick;
             Cube2Producer.OnLeftCube2Click -= OnLeftCube2Click;
+            CubeMove.OnSwitchCube -= OnSwitchCube;
             OnDisable();
         }
         private void OnLeftCubeClick(Vector3 leftCubeSize)
         {
             m_scoreManager.IncreaseScore((int) leftCubeSize.x);
+            FreezeCube?.Invoke();
         }
         private void OnLeftCube2Click(Vector3 leftCube2Size)
         {
             m_lifeManager.IncreaseLife(2);
+            UnfreezeCube?.Invoke();
         }
 
         private void Update()

@@ -23,7 +23,7 @@ namespace NJ_Event
         public override void OnMouseUp()
         {
 //Debug.Log("1 Cube OnMouseLeftUp");
-            EventsHandler.TriggerEvent("OnLeftCube2Click", new Dictionary<string, object> { { "clic", 20 } });
+            //EventsHandler.TriggerEvent("OnLeftCube2Click", new Dictionary<string, object> { { "clic", 20 } });
         }
     }
 }

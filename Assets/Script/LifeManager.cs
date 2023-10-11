@@ -17,12 +17,10 @@ namespace NJ_Event
         {
             lifeText = GetComponent<TMP_Text>();
         }
-
         public bool IsDead()
         {
-            return life >= 0;
+            return life <= 0;
         }
-
         public void IncreaseLife(int _life)
         {
             life += _life;
