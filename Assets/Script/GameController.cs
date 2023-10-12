@@ -14,7 +14,7 @@ namespace NJ_Event {
         public static event System.Action<KeyCode> OnKeyPress;
 
         public static event System.Action FreezeCube;
-        public static event System.Action UnfreezeCube;
+        public static event System.Action<GameObject> UnfreezeCube;
 
         //private InputManager m_inputManager;
         private ScoreManager m_scoreManager;
@@ -53,10 +53,10 @@ namespace NJ_Event {
             m_scoreManager.IncreaseScore((int) leftCubeSize.x);
             FreezeCube?.Invoke();
         }
-        private void OnLeftCube2Click(Vector3 leftCube2Size)
+        private void OnLeftCube2Click(Vector3 leftCube2Size, GameObject cube)
         {
             m_lifeManager.IncreaseLife(2);
-            UnfreezeCube?.Invoke();
+            UnfreezeCube?.Invoke(cube);
         }
 
         private void Update()

@@ -1,10 +1,11 @@
 namespace NJ_Event
 {
+    using System;
     using UnityEngine;
 
     public class CubeMove : MonoBehaviour
     {
-        public float moveDistance = 1.0f;
+        public float moveDistance = 4.0f;
         public float moveSpeed = 1.0f;
         public float moveTime = 2.0f;
         public bool isMoving = true;
@@ -48,6 +49,14 @@ namespace NJ_Event
         {
             GameController.FreezeCube -= Freeze;
             GameController.UnfreezeCube -= Unfreeze;
+        }
+
+        private void Unfreeze(GameObject cube)
+        {
+            if (cube == gameObject)
+            {
+                isFrozen = false;
+            }
         }
 
         public void Freeze()

@@ -5,7 +5,7 @@ namespace NJ_Event
 
     public class Cube2Producer : CubeEventProducer
     {
-        public static event System.Action<Vector3> OnLeftCube2Click;
+        public static event System.Action<Vector3, GameObject> OnLeftCube2Click;
         public override void OnEnable()
         {
         }
@@ -15,7 +15,7 @@ namespace NJ_Event
         }
         public override void OnMouseDown()
         {
-            OnLeftCube2Click?.Invoke(cubeSize * 3);
+            OnLeftCube2Click?.Invoke(cubeSize * 2, gameObject);
             //OnMouseDown = true;
             //Debug.Log("1 Cube OnMouseLeftDown");
             //EventsHandler.TriggerEvent("leftClicCubeDown", new Dictionary<string, object> { { "clic", 1 } });
