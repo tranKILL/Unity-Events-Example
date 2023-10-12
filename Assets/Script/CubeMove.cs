@@ -5,28 +5,37 @@ using UnityEngine;
 public class CubeMove : MonoBehaviour
 {
     public float moveDistance = 1.0f; // The distance the cube will move up and down
+    private float distanceCovered = 0;
+    private float distanceCoveredSave = 0;
     public float moveSpeed = 1.0f; // The speed of the movement
     public float waitingTime = 0.2f;
 
+    private Vector3 startBasePosition;
     private Vector3 startPosition;
     private Vector3 endPosition;
+    private float journeyLength;
+    private Vector3 lastPosition;
+    private float initialMoveDistance;
     private int nbCubeSwitch = 0;
-    private bool isMoving = false;
+    private bool isMoving = true;
+    private Coroutine moveCoroutine;
 
     public static event System.Action<int> OnSwitchCube;
 
     void Start()
     {
-        GameController.FreezeCube += Freeze;
-        GameController.UnfreezeCube += Unfreeze;
-        startPosition = transform.position; // Store the initial position of the cube
-        endPosition = startPosition + Vector3.up * moveDistance; // Calculate the end position for the upward movement
-        StartCoroutine(MoveUpAndDown()); // Start the movement coroutine
+        initialMoveDistance = moveDistance;
+        startBasePosition = transform.position;
+        startPosition = startBasePosition;
+        endPosition = startBasePosition + Vector3.up * moveDistance;
+        journeyLength = Vector3.Distance(startPosition, endPosition);
+        moveCoroutine = StartCoroutine(MoveUpAndDown());
+        GameController.FreezeCube += Freeze; GameController.UnfreezeCube += Unfreeze;
     }
+
     private void OnDestroy()
     {
-        GameController.FreezeCube -= Freeze;
-        GameController.UnfreezeCube -= Unfreeze;
+        GameController.FreezeCube -= Freeze; GameController.UnfreezeCube -= Unfreeze;
     }
     public void SetSpeed(float _speed = 1) //useless ?
     {
@@ -34,42 +43,59 @@ public class CubeMove : MonoBehaviour
     }
     public void Freeze()
     {
-        isMoving = false;
+        if (isMoving)
+        {
+            isMoving = false;
+            distanceCoveredSave = distanceCovered;
+            StopCoroutine(moveCoroutine);
+            startPosition = lastPosition;
+Debug.Log("Freeze:" + distanceCoveredSave + " - lastPosition:" + startPosition);
+        }
     }
+
     public void Unfreeze()
     {
-        isMoving = true;
+        if (!isMoving)
+        {
+            isMoving = true;
+            moveDistance = initialMoveDistance;
+            distanceCovered = distanceCoveredSave;
+Debug.Log("Unfreeze:" + distanceCovered + " - lastPosition:" + startPosition);
+            moveCoroutine = StartCoroutine(MoveUpAndDown());
+        }
     }
 
     IEnumerator MoveUpAndDown()
     {
-        while (true)
+Debug.Log("MoveUpAndDown");
+        Vector3 tempPosition;
+        float startTime, distanceMoved, fractionOfJourney;
+
+        while (isMoving)
         {
-            if (isMoving)
+            startTime = Time.time;
+            while (isMoving && distanceCovered < journeyLength)
             {
-                // Move the cube from its current position to the end position
-                float journeyLength = Vector3.Distance(startPosition, endPosition);
-                float startTime = Time.time;
-                float distanceCovered = 0f;
+                distanceMoved = (Time.time - startTime) * moveSpeed;
+                fractionOfJourney = distanceMoved / journeyLength;
+                transform.position = Vector3.Lerp(startPosition, endPosition, fractionOfJourney);
+                lastPosition = transform.position;
+                distanceCovered = Vector3.Distance(startPosition, transform.position);
+                //distanceCoveredSave = distanceCovered;
+Debug.Log(distanceCovered + " < " + journeyLength);
+                yield return null;
+            }
 
-                while (distanceCovered < journeyLength)
-                {
-                    float distanceMoved = (Time.time - startTime) * moveSpeed;
-                    float fractionOfJourney = distanceMoved / journeyLength;
-                    transform.position = Vector3.Lerp(startPosition, endPosition, fractionOfJourney);
-                    distanceCovered = Vector3.Distance(startPosition, transform.position);
-                    yield return null;
-                }
-
-                // Swap start and end positions to move in the opposite direction
-                Vector3 tempPosition = startPosition;
+            if (isMoving) {
+                tempPosition = startPosition;
                 startPosition = endPosition;
                 endPosition = tempPosition;
+                distanceCoveredSave = distanceCovered = 0;
+                //distanceCoveredSave = distanceCovered = Vector3.Distance(startPosition, transform.position);
                 nbCubeSwitch++;
                 OnSwitchCube?.Invoke(nbCubeSwitch);
-
-                // Wait for a moment at the top and bottom
-                yield return new WaitForSeconds(0.2f);
+Debug.Log("OnSwitchCube");
+                yield return new WaitForSeconds(waitingTime);
             }
         }
     }
