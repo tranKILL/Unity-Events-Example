@@ -3,7 +3,7 @@ namespace NJ_Event
     using System;
     using UnityEngine;
 
-    public class CubeMove : MonoBehaviour
+    public class UpAndDownMove : MonoBehaviour
     {
         public float moveDistance = 4.0f;
         public float moveSpeed = 1.0f;

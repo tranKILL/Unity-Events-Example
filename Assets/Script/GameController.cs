@@ -1,15 +1,20 @@
 namespace NJ_Event {
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
 #if UNITY_EDITOR
     [DisallowMultipleComponent]
-    //[RequireComponent(typeof(InputManager))]
+    //[RequireComponent(typeof(EventManager))]
+    [RequireComponent(typeof(InputManager))]
     [RequireComponent(typeof(ScoreManager))]
-    //[RequireComponent(typeof(LifeManager))]
+    [RequireComponent(typeof(LifeManager))]
 #endif
+    
+    //TODO click 2 secondes on grey cube increase compteur more and more by time user push on the click, 2 script + event manager - init -destroy + singleton
 
     public class GameController : InputManager {
+        public static GameController Instance { get; private set; }
         public static event System.Action<Vector3> OnMouseClick;
         public static event System.Action<KeyCode> OnKeyPress;
 
@@ -24,17 +29,32 @@ namespace NJ_Event {
 
         private void Awake()
         {
-            //m_inputManager = gameObject.GetComponent<InputManager>();
+            //makeSingleton(gameObject);
+                //m_inputManager = gameObject.GetComponent<InputManager>();
+            //m_eventManager = GetComponent<EventManager>();
             m_scoreManager = GetComponent<ScoreManager>(); //-> Child
             m_lifeManager = GetComponentInChildren<LifeManager>();
         }
- 
+
+        private void makeSingleton(GameObject gameObject)
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            DontDestroyOnLoad(gameObject);
+        }
+
         private void Start()
         {
             screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
             CubeEventProducer.OnLeftCubeClick += OnLeftCubeClick;
             Cube2Producer.OnLeftCube2Click += OnLeftCube2Click;
-            CubeMove.OnSwitchCube += OnSwitchCube;
+            UpAndDownMove.OnSwitchCube += OnSwitchCube;
         }
         private void OnSwitchCube(int _nbCubeSwitch)
         {
@@ -45,7 +65,7 @@ namespace NJ_Event {
             // Assurez-vous de vous désabonner de l'événement pour éviter des fuites de mémoire
             CubeEventProducer.OnLeftCubeClick -= OnLeftCubeClick;
             Cube2Producer.OnLeftCube2Click -= OnLeftCube2Click;
-            CubeMove.OnSwitchCube -= OnSwitchCube;
+            UpAndDownMove.OnSwitchCube -= OnSwitchCube;
             OnDisable();
         }
         private void OnLeftCubeClick(Vector3 leftCubeSize)
